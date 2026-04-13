@@ -1,0 +1,218 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; direction: rtl; }
+.page { background: linear-gradient(135deg, #fff8f0 0%, #fef3e8 50%, #fde8d0 100%); min-height: 100vh; padding: 0; }
+.hero { background: linear-gradient(135deg, #8B4513 0%, #D2691E 40%, #CD853F 100%); padding: 2rem 1rem 3rem; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+.hero-inner { position: relative; z-index: 1; }
+.gold-line { width: 80px; height: 3px; background: linear-gradient(90deg, transparent, #FFD700, transparent); margin: 0.5rem auto; }
+.hero h1 { color: #FFD700; font-size: 1.6rem; font-weight: 700; margin-bottom: 0.3rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+.hero p { color: #FFE4B5; font-size: 0.9rem; }
+.photo-container { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #FFD700; overflow: hidden; margin: 0 auto 1rem; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+.photo-container img { width: 100%; height: 100%; object-fit: cover; }
+.badge { background: rgba(255,215,0,0.2); border: 1px solid #FFD700; color: #FFD700; padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; display: inline-block; margin-top: 0.5rem; }
+.container { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem; }
+.section-card { background: #fff; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: 0 2px 12px rgba(139,69,19,0.08); border: 1px solid #F5DEB3; }
+.section-title { color: #8B4513; font-size: 1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #F5DEB3; padding-bottom: 0.6rem; }
+.section-title .icon { font-size: 1.1rem; }
+.field-group { margin-bottom: 1rem; }
+.field-label { font-size: 0.82rem; color: #6B4226; font-weight: 600; margin-bottom: 0.35rem; display: block; }
+.field-input { width: 100%; padding: 10px 14px; border: 1.5px solid #E8D5C0; border-radius: 10px; font-size: 0.88rem; color: #4A2C0A; background: #FFFAF5; font-family: inherit; direction: rtl; transition: border-color 0.2s; outline: none; }
+.field-input:focus { border-color: #CD853F; background: #fff; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.conditions-list { list-style: none; }
+.conditions-list li { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #F5EDE0; font-size: 0.85rem; color: #4A2C0A; line-height: 1.5; }
+.conditions-list li:last-child { border-bottom: none; }
+.cond-num { background: linear-gradient(135deg, #8B4513, #CD853F); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.submit-btn { width: 100%; background: linear-gradient(135deg, #8B4513, #D2691E); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; letter-spacing: 0.5px; transition: opacity 0.2s; }
+.submit-btn:hover { opacity: 0.9; }
+.result-box { display: none; border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem; }
+.result-accepted { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); border: 2px solid #4CAF50; }
+.result-rejected { background: linear-gradient(135deg, #FFEBEE, #FFCDD2); border: 2px solid #F44336; }
+.result-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.result-text { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+.result-accepted .result-text { color: #2E7D32; }
+.result-rejected .result-text { color: #C62828; }
+.result-sub { font-size: 0.82rem; color: #555; }
+.fail-reasons { text-align: right; margin-top: 0.8rem; }
+.fail-item { background: rgba(244,67,54,0.08); border-radius: 8px; padding: 6px 10px; margin-top: 5px; font-size: 0.78rem; color: #C62828; }
+.footer { background: #5C2C0A; color: #D4A97A; text-align: center; padding: 1.2rem; font-size: 0.78rem; margin-top: 1.5rem; }
+.gold-divider { text-align: center; color: #CD853F; font-size: 1rem; letter-spacing: 6px; margin: 0.5rem 0; }
+select.field-input { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238B4513' d='M6 8L0 0h12z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: left 12px center; padding-left: 32px; }
+</style>
+
+<div class="page">
+<div class="hero">
+  <div class="hero-inner">
+    <div class="photo-container">
+      <img src="/mnt/user-data/uploads/WhatsApp_Image_2026-04-13_at_7_06_30_PM.jpeg" alt="الداعية مدين" onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;background:#8B4513;display:flex;align-items:center;justify-content:center;color:#FFD700;font-size:2rem;\'>م</div>'" />
+    </div>
+    <div class="gold-line"></div>
+    <h1>الداعية مدين</h1>
+    <p>نموذج طلب الزواج الرسمي</p>
+    <div class="gold-line"></div>
+    <div class="badge">للفتيات الراغبات في الزواج فقط</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div id="result-box" class="result-box">
+    <div class="result-icon" id="result-icon"></div>
+    <div class="result-text" id="result-text"></div>
+    <div class="result-sub" id="result-sub"></div>
+    <div id="fail-reasons" class="fail-reasons"></div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title"><span class="icon">📋</span> شروط القبول</div>
+    <ul class="conditions-list">
+      <li><div class="cond-num">١</div><span>أن تكون عذراء (غير متزوجة سابقاً)</span></li>
+      <li><div class="cond-num">٢</div><span>أن تكون بيضاء أو حنطية البشرة</span></li>
+      <li><div class="cond-num">٣</div><span>أن يكون عمرها بين 21 و25 سنة</span></li>
+      <li><div class="cond-num">٤</div><span>أن يكون طولها 170 سم أو أكثر</span></li>
+      <li><div class="cond-num">٥</div><span>أن لا يتجاوز وزنها 50 كيلوغرام</span></li>
+    </ul>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title"><span class="icon">👤</span> المعلومات الشخصية</div>
+    <div class="field-group">
+      <label class="field-label">الاسم الكامل</label>
+      <input type="text" class="field-input" id="name" placeholder="أدخلي اسمك الكامل" />
+    </div>
+    <div class="row2">
+      <div class="field-group">
+        <label class="field-label">العمر (بالسنوات)</label>
+        <input type="number" class="field-input" id="age" placeholder="مثال: 23" min="15" max="50" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">الجنسية</label>
+        <input type="text" class="field-input" id="nationality" placeholder="مثال: سعودية" />
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title"><span class="icon">📏</span> المواصفات الجسدية</div>
+    <div class="row2">
+      <div class="field-group">
+        <label class="field-label">الطول (سم)</label>
+        <input type="number" class="field-input" id="height" placeholder="مثال: 172" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">الوزن (كيلوغرام)</label>
+        <input type="number" class="field-input" id="weight" placeholder="مثال: 48" />
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">لون البشرة</label>
+      <select class="field-input" id="skin">
+        <option value="">— اختاري —</option>
+        <option value="white">بيضاء</option>
+        <option value="wheat">حنطية</option>
+        <option value="brown">سمراء</option>
+        <option value="dark">داكنة</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label class="field-label">الحالة الاجتماعية</label>
+      <select class="field-input" id="status">
+        <option value="">— اختاري —</option>
+        <option value="virgin">عذراء (لم تتزوج مسبقاً)</option>
+        <option value="divorced">مطلقة</option>
+        <option value="widowed">أرملة</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title"><span class="icon">💼</span> الوضع الوظيفي والمادي</div>
+    <div class="field-group">
+      <label class="field-label">الوظيفة</label>
+      <select class="field-input" id="job">
+        <option value="">— اختاري —</option>
+        <option value="employed">موظفة</option>
+        <option value="student">طالبة</option>
+        <option value="housewife">ربة منزل</option>
+        <option value="business">صاحبة عمل</option>
+        <option value="other">أخرى</option>
+      </select>
+    </div>
+    <div class="field-group" id="job-title-group" style="display:none;">
+      <label class="field-label">المسمى الوظيفي</label>
+      <input type="text" class="field-input" id="job-title" placeholder="مثال: معلمة، طبيبة..." />
+    </div>
+    <div class="field-group">
+      <label class="field-label">الثروة / الوضع المادي</label>
+      <select class="field-input" id="wealth">
+        <option value="">— اختاري —</option>
+        <option value="rich">ميسورة الحال</option>
+        <option value="middle">متوسطة الحال</option>
+        <option value="modest">محدودة الدخل</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="gold-divider">✦ ✦ ✦</div>
+
+  <button class="submit-btn" onclick="evaluate()">تقديم الطلب والتحقق من الأهلية</button>
+
+</div>
+
+<div class="footer">
+  جميع المعلومات سرية ولا تُشارك مع أي طرف ثالث<br>
+  موقع طلب الزواج من الداعية مدين — 1446هـ
+</div>
+</div>
+
+<script>
+document.getElementById('job').addEventListener('change', function() {
+  document.getElementById('job-title-group').style.display = this.value === 'employed' ? 'block' : 'none';
+});
+
+function evaluate() {
+  const name = document.getElementById('name').value.trim();
+  const age = parseInt(document.getElementById('age').value);
+  const height = parseInt(document.getElementById('height').value);
+  const weight = parseInt(document.getElementById('weight').value);
+  const skin = document.getElementById('skin').value;
+  const status = document.getElementById('status').value;
+
+  if (!name || !age || !height || !weight || !skin || !status) {
+    alert('يرجى تعبئة جميع الحقول المطلوبة');
+    return;
+  }
+
+  const fails = [];
+  if (status !== 'virgin') fails.push('يشترط أن تكون عذراء');
+  if (skin !== 'white' && skin !== 'wheat') fails.push('يشترط أن تكون البشرة بيضاء أو حنطية');
+  if (isNaN(age) || age < 21 || age > 25) fails.push('يشترط أن يكون العمر بين 21 و25 سنة');
+  if (isNaN(height) || height < 170) fails.push('يشترط أن يكون الطول 170 سم أو أكثر');
+  if (isNaN(weight) || weight > 50) fails.push('يشترط أن لا يتجاوز الوزن 50 كيلوغرام');
+
+  const box = document.getElementById('result-box');
+  const icon = document.getElementById('result-icon');
+  const text = document.getElementById('result-text');
+  const sub = document.getElementById('result-sub');
+  const reasons = document.getElementById('fail-reasons');
+
+  box.style.display = 'block';
+  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  if (fails.length === 0) {
+    box.className = 'result-box result-accepted';
+    icon.textContent = '✅';
+    text.textContent = 'مؤهلة للزواج ✅';
+    sub.textContent = 'تهانينا! استيفيت جميع شروط الداعية مدين. سيتم التواصل معكِ قريباً.';
+    reasons.innerHTML = '';
+  } else {
+    box.className = 'result-box result-rejected';
+    icon.textContent = '❌';
+    text.textContent = 'مرفوضة للزواج ❌';
+    sub.textContent = 'للأسف لا تستوفين الشروط المطلوبة للأسباب التالية:';
+    reasons.innerHTML = fails.map(f => `<div class="fail-item">• ${f}</div>`).join('');
+  }
+}
+</script>
